@@ -4,17 +4,47 @@ import { RegistrationService } from './registration.service';
 
 describe('RegistrationController', () => {
   let controller: RegistrationController;
+  let mockRegistrationService: {
+    create: jest.Mock;
+  };
 
   beforeEach(async () => {
+    mockRegistrationService = {
+      create: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RegistrationController],
-      providers: [RegistrationService],
+      providers: [
+        {
+          provide: RegistrationService,
+          useValue: mockRegistrationService,
+        },
+      ],
     }).compile();
 
     controller = module.get<RegistrationController>(RegistrationController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should call registrationService.create with correct params', async () => {
+    const body = {
+      firstName: 'Nanthawat',
+      lastName: 'Intisaen',
+      phone: '0999999999',
+      eventId: '1',
+    };
+
+    const mockResponse = { message: 'success' };
+
+    mockRegistrationService.create.mockResolvedValue(mockResponse);
+
+    const result = await controller.create(body);
+
+    expect(mockRegistrationService.create).toHaveBeenCalledWith(body);
+    expect(result).toEqual(mockResponse);
   });
 });
