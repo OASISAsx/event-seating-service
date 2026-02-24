@@ -12,4 +12,9 @@ export class CreateRegistrationDto {
   @IsNumber()
   @IsOptional()
   seatNumber?: number;
+  @IsString()
+  eventId?: string;
+  @IsOptional()
+  @IsString()
+  seatId?: string | null;
 }
