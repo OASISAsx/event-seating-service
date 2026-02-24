@@ -14,6 +14,33 @@ model Admin {
   createdAt DateTime @default(now())
 }
 
+model Event {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  location    String?
+
+  startDate   DateTime
+  endDate     DateTime
+  seatsPerRow Int
+  totalSeats  Int
+  isActive    Boolean     @default(true)
+  status      EventStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  registrations Registration[]
+  seats         Seat[]
+}
+
+enum EventStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
 model Registration {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   firstName  String
@@ -21,10 +48,25 @@ model Registration {
   phone      String   @unique
   seatNumber Int?
   createdAt  DateTime @default(now())
+  event      Event?   @relation(fields: [eventId], references: [id])
+  eventId    String?  @db.ObjectId
+  seat       Seat?    @relation(fields: [seatId], references: [id])
+  seatId     String?  @unique @db.ObjectId
 }
 
 model Seat {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  seatNumber Int     @unique
+  seatNumber String
   isBooked   Boolean @default(false)
+
+  event        Event         @relation(fields: [eventId], references: [id])
+  eventId      String        @db.ObjectId
+  registration Registration?
+
+  @@unique([eventId, seatNumber])
 }
+
+// enum SeatStatus {
+//   DRAFT
+//   ACTIVE
+// }

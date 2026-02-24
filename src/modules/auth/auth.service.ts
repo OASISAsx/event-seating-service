@@ -16,7 +16,6 @@ export class AuthService {
     });
 
     if (!admin) throw new UnauthorizedException('Invalid credentials');
-
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) throw new UnauthorizedException('Invalid credentials');
 
