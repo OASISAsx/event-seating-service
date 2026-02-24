@@ -42,26 +42,25 @@ enum EventStatus {
 }
 
 model Registration {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  firstName  String
-  lastName   String
-  phone      String   @unique
-  seatNumber Int?
-  createdAt  DateTime @default(now())
-  event      Event?   @relation(fields: [eventId], references: [id])
-  eventId    String?  @db.ObjectId
-  seat       Seat?    @relation(fields: [seatId], references: [id])
-  seatId     String?  @unique @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstName String
+  lastName  String
+  phone     String   @unique
+  createdAt DateTime @default(now())
+  event     Event?   @relation(fields: [eventId], references: [id])
+  eventId   String?  @db.ObjectId
+  seat      Seat?    @relation(fields: [seatId], references: [id])
+  seatId    String?  @unique @db.ObjectId
 }
 
 model Seat {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  seatNumber String
-  isBooked   Boolean @default(false)
-
-  event        Event         @relation(fields: [eventId], references: [id])
-  eventId      String        @db.ObjectId
-  registration Registration?
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  seatNumber     String
+  isBooked       Boolean       @default(false)
+  seatAssignedAt DateTime?
+  event          Event         @relation(fields: [eventId], references: [id])
+  eventId        String        @db.ObjectId
+  registration   Registration?
 
   @@unique([eventId, seatNumber])
 }
