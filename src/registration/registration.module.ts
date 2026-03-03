@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
 import { RegistrationController } from './registration.controller';
 import { PrismaModule } from 'src/modules/prisma/prisma.module';
-import { PrismaRegistrationRepository } from './repository/prisma-registration.repository';
+import { PrismaRegistrationRepository } from './repository/registration.repository';
 
 @Module({
   imports: [PrismaModule],

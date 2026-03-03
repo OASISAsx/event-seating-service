@@ -88,8 +88,9 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 // import { IRegistrationRepository } from './interfaces/registration.repository.interface';
 import { CreateRegistrationDto } from './dto/create-registration.dto';
-import * as registrationRepositoryInterface from './repository/registration.repository.interface';
+import * as registrationRepositoryInterface from './repository/registration.interface';
 import { UpdateRegistrationDto } from './dto/update-registration.dto';
+import { PaginationDto } from 'src/common/utils/dto/pagination.dto';
 
 @Injectable()
 export class RegistrationService {
@@ -115,8 +116,14 @@ export class RegistrationService {
       data: create,
     };
   }
+  async findAll(query: PaginationDto) {
+    return await this.registrationRepo.findAll(query);
+  }
+  async findOne(id: string) {
+    return this.registrationRepo.findOne(id);
+  }
   async update(id: string, dto: UpdateRegistrationDto) {
-    if (!dto.seatId) throw new BadRequestException('ระบบที่นั่ง');
+    if (!dto.seatId) throw new BadRequestException('ระบุที่นั่ง');
     const update = await this.registrationRepo.update(id, dto);
 
     return update;

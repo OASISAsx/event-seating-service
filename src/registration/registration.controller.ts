@@ -1,15 +1,17 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   Body,
   Patch,
   Param,
+  Query,
   // Delete,
 } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
 import { CreateRegistrationDto } from './dto/create-registration.dto';
 import { UpdateRegistrationDto } from './dto/update-registration.dto';
+import { PaginationDto } from 'src/common/utils/dto/pagination.dto';
 // import { UpdateRegistrationDto } from './dto/update-registration.dto';
 
 @Controller('registration')
@@ -21,15 +23,15 @@ export class RegistrationController {
     return this.registrationService.create(createRegistrationDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.registrationService.findAll();
-  // }
+  @Get()
+  findAll(@Query() query: PaginationDto) {
+    return this.registrationService.findAll(query);
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.registrationService.findOne(id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.registrationService.findOne(id);
+  }
 
   @Patch(':id')
   update(
