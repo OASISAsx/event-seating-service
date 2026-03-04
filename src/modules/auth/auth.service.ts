@@ -31,7 +31,21 @@ export class AuthService {
     };
 
     return {
+      admin,
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async createAdmin() {
+    const hashedPassword = await bcrypt.hash('123456', 10);
+
+    const admin = await this.prisma.admin.create({
+      data: {
+        username: 'admin',
+        password: hashedPassword,
+      },
+    });
+
+    return admin;
   }
 }
