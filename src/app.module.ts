@@ -14,6 +14,7 @@ import { EventsModule } from './modules/events/events.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
     RegistrationModule,
     EventsModule,
   ],
