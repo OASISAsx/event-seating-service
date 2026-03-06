@@ -19,8 +19,9 @@ export class RegistrationController {
   constructor(private readonly registrationService: RegistrationService) {}
 
   @Post()
-  create(@Body() createRegistrationDto: CreateRegistrationDto) {
-    return this.registrationService.create(createRegistrationDto);
+  create(@Body() body: { payload: CreateRegistrationDto }) {
+    console.log(body, 'body');
+    return this.registrationService.create(body.payload);
   }
 
   @Get()
