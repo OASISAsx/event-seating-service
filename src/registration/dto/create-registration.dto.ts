@@ -1,5 +1,4 @@
-import { IsPhoneNumber, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsEmail, IsPhoneNumber, IsString } from 'class-validator';
 
 export class CreateRegistrationDto {
   @IsString()
@@ -8,7 +7,9 @@ export class CreateRegistrationDto {
   lastName: string;
   @IsPhoneNumber('TH')
   phone: string;
-  @Type(() => Number)
+  @IsEmail()
+  email: string;
+
   @IsString()
   eventId?: string;
 }

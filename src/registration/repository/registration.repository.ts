@@ -42,6 +42,16 @@ export class PrismaRegistrationRepository implements IRegistrationRepository {
     // ใช้ $transaction เพื่อให้ Query ทำงานพร้อมกันและแม่นยำ
     const [data, total] = await this.prisma.$transaction([
       this.prisma.registration.findMany({
+        include: {
+          event: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              seats: true,
+            },
+          },
+        },
         skip,
         take,
         orderBy: { id: 'desc' },
@@ -96,8 +106,6 @@ export class PrismaRegistrationRepository implements IRegistrationRepository {
   }
 
   async create(data: CreateRegistrationDto): Promise<any> {
-    console.log(data, 'test');
-
     return this.prisma.registration.create({ data });
   }
 }

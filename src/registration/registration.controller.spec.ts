@@ -32,10 +32,13 @@ describe('RegistrationController', () => {
 
   it('should call registrationService.create with correct params', async () => {
     const body = {
-      firstName: 'Nanthawat',
-      lastName: 'Intisaen',
-      phone: '0999999999',
-      eventId: '1',
+      payload: {
+        firstName: 'Nanthawat',
+        lastName: 'Intisaen',
+        phone: '0999999999',
+        email: 'wave001133@gmail.com',
+        eventId: '1',
+      },
     };
 
     const mockResponse = { message: 'success' };
@@ -44,7 +47,7 @@ describe('RegistrationController', () => {
 
     const result = await controller.create(body);
 
-    expect(mockRegistrationService.create).toHaveBeenCalledWith(body);
+    expect(mockRegistrationService.create).toHaveBeenCalledWith(body.payload);
     expect(result).toEqual(mockResponse);
   });
 });

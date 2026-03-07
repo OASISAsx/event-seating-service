@@ -104,6 +104,7 @@ export class RegistrationService {
     if (existingPhone) {
       throw new BadRequestException('เบอร์โทรศัพท์นี้ถูกใช้งานไปแล้ว');
     }
+    if (!dto.eventId) throw new BadRequestException('กรุณาเลือกอีเวนท์');
     const existingName = await this.registrationRepo.findName(
       dto.firstName,
       dto.lastName,

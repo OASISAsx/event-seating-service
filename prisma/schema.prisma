@@ -46,6 +46,7 @@ model Registration {
   firstName String
   lastName  String
   phone     String   @unique
+  email     String
   createdAt DateTime @default(now())
   event     Event?   @relation(fields: [eventId], references: [id])
   eventId   String?  @db.ObjectId

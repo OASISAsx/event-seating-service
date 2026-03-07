@@ -9,6 +9,7 @@ export class UpdateRegistrationDto extends PartialType(
     'eventId',
     'firstName',
     'lastName',
+    'email',
   ] as const),
 ) {
   @IsString()
