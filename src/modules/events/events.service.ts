@@ -38,9 +38,7 @@ export class EventsService {
 
   findAll() {
     return this.prisma.$transaction(async (tx) => {
-      const findEvent = await tx.event.findMany({
-        include: { seats: true },
-      });
+      const findEvent = await tx.event.findMany({});
       return findEvent;
     });
   }

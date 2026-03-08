@@ -118,6 +118,7 @@ export class RegistrationService {
     };
   }
   async findAll(query: PaginationDto) {
+    console.log(query, 'query');
     return await this.registrationRepo.findAll(query);
   }
   async findOne(id: string) {
