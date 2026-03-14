@@ -1,0 +1,8 @@
+
+### `.dockerignore` (สำคัญมาก)
+```
+node_modules
+dist
+.git
+.env
+*.md
