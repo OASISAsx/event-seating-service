@@ -1,15 +1,25 @@
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
+FROM node:20-alpine
 
-FROM node:20-alpine AS production
 WORKDIR /app
-ENV NODE_ENV=production
-COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
-COPY --from=builder /app/dist ./dist
-EXPOSE 3001
-CMD ["node", "dist/main"]
+
+# install pnpm
+RUN npm install -g pnpm
+
+# copy lockfile
+COPY package.json pnpm-lock.yaml ./
+
+# install dependency
+RUN pnpm install --frozen-lockfile
+
+# copy project
+COPY . .
+
+# generate prisma
+RUN pnpm prisma generate
+
+# build nest
+RUN pnpm run build
+
+EXPOSE 3000
+
+CMD ["node", "dist/main.js"]
