@@ -1,12 +1,14 @@
 services:
   backend:
     build: .
-    container_name: myproject-backend-1
+    container_name: eventSeat-backend-1
     ports:
       - '3002:3001'
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/mydb # ← ชื่อ internal ใช้ได้เลย
+      - MONGODB_URI=mongodb://mongo:27017/mydb
     depends_on:
       mongo:
         condition: service_healthy
