@@ -1,0 +1,31 @@
+services:
+  backend:
+    build: .
+    container_name: myproject-backend-1
+    ports:
+      - '3002:3001'
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongo:27017/mydb # ← ชื่อ internal ใช้ได้เลย
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    container_name: eventSeat-mongo-1 # ← ชื่อใหม่ ไม่ชนกับ nestservice
+    ports:
+      - '27018:27017' # ← host port 27018 ว่างอยู่
+    volumes:
+      - myproject_mongo_data:/data/db # ← volume แยกของตัวเอง
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  myproject_mongo_data: # ← ไม่ยุ่งกับ mongo_data ของ nestservice
