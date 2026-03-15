@@ -36,26 +36,27 @@ jobs:
           tags: ghcr.io/oasisasx/event-seating-service:build
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          
+ deploy:
+  needs: build-and-push
+  runs-on: ubuntu-latest
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
+  steps:
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd ${{ secrets.DEPLOY_PATH }}
 
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd ${{ secrets.DEPLOY_PATH }}
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+            docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            echo "${{ secrets.GITHUB_TOKEN }}" | \
-              docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker compose pull backend
 
-            docker compose pull backend
-            docker compose up -d --remove-orphans
+          docker compose up -d --force-recreate --remove-orphans
 
-            docker compose ps
-            echo "✅ Deploy สำเร็จ"
+          docker compose ps
+          echo "✅ Deploy สำเร็จ"
