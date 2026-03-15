@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: oasisasx/event-seating-service
 
 jobs:
   build-and-push:
@@ -33,7 +33,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:build
+          tags: ghcr.io/oasisasx/event-seating-service:build
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

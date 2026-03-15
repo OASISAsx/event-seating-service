@@ -1,6 +1,6 @@
 services:
   backend:
-    build: .
+    image: ghcr.io/oasisasx/event-seating-service:build
     container_name: eventSeat-backend-1
     ports:
       - '3002:3001'
@@ -16,11 +16,11 @@ services:
 
   mongo:
     image: mongo:7
-    container_name: eventSeat-mongo-1 # ← ชื่อใหม่ ไม่ชนกับ nestservice
+    container_name: eventSeat-mongo-1
     ports:
-      - '27018:27017' # ← host port 27018 ว่างอยู่
+      - '27018:27017'
     volumes:
-      - eventSeat_mongo_data:/data/db # ← volume แยกของตัวเอง
+      - eventSeat_mongo_data:/data/db
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
@@ -30,4 +30,4 @@ services:
       start_period: 20s
 
 volumes:
-  eventSeat_mongo_data: # ← ไม่ยุ่งกับ mongo_data ของ nestservice
+  eventSeat_mongo_data:
