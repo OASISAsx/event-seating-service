@@ -3,6 +3,7 @@ export class RegistrationEntity {
   firstName: string;
   lastName: string;
   phone: string;
+  status: string;
   email: string | null;
   seatId: string | null;
   eventId: string | null;

@@ -41,17 +41,24 @@ enum EventStatus {
   CANCELLED
 }
 
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
 model Registration {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String             @id @default(auto()) @map("_id") @db.ObjectId
   firstName String
   lastName  String
-  phone     String   @unique
+  phone     String             @unique
   email     String
-  createdAt DateTime @default(now())
-  event     Event?   @relation(fields: [eventId], references: [id])
-  eventId   String?  @db.ObjectId
-  seat      Seat?    @relation(fields: [seatId], references: [id])
-  seatId    String?  @db.ObjectId // <--- เอา @unique ออกตรงนี้
+  status    RegistrationStatus @default(PENDING)
+  createdAt DateTime           @default(now())
+  event     Event?             @relation(fields: [eventId], references: [id])
+  eventId   String?            @db.ObjectId
+  seat      Seat?              @relation(fields: [seatId], references: [id])
+  seatId    String?            @db.ObjectId
 }
 
 model Seat {

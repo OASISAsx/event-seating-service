@@ -39,7 +39,6 @@ export class PrismaRegistrationRepository implements IRegistrationRepository {
   ): Promise<PaginatedResponse<RegistrationEntity>> {
     const { skip, take, page, limit } = getPagination(query);
 
-    // ใช้ $transaction เพื่อให้ Query ทำงานพร้อมกันและแม่นยำ
     const [data, total] = await this.prisma.$transaction([
       this.prisma.registration.findMany({
         include: {
@@ -56,6 +55,7 @@ export class PrismaRegistrationRepository implements IRegistrationRepository {
         take,
         orderBy: { id: 'desc' },
       }),
+
       this.prisma.registration.count(),
     ]);
 
