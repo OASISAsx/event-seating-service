@@ -122,7 +122,11 @@ export class RegistrationService {
     return await this.registrationRepo.findAll(query);
   }
   async findOne(id: string) {
-    return this.registrationRepo.findOne(id);
+    const data = await this.registrationRepo.findOne(id);
+    return {
+      success: 'true',
+      data: data,
+    };
   }
   async update(id: string, dto: UpdateRegistrationDto) {
     if (!dto.seatId) throw new BadRequestException('ระบุที่นั่ง');

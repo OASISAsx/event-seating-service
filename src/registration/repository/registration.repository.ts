@@ -38,9 +38,12 @@ export class PrismaRegistrationRepository implements IRegistrationRepository {
     query: PaginationDto,
   ): Promise<PaginatedResponse<RegistrationEntity>> {
     const { skip, take, page, limit } = getPagination(query);
-
-    const [data, total] = await this.prisma.$transaction([
+    const where = {
+      ...(query.status && { status: query.status }),
+    };
+    const [data, total, statusSummary] = await this.prisma.$transaction([
       this.prisma.registration.findMany({
+        where,
         include: {
           event: {
             select: {
@@ -57,11 +60,27 @@ export class PrismaRegistrationRepository implements IRegistrationRepository {
       }),
 
       this.prisma.registration.count(),
+
+      this.prisma.registration.groupBy({
+        by: ['status'],
+        _count: {
+          status: true,
+        },
+        orderBy: {
+          status: 'asc',
+        },
+      }),
     ]);
+
+    const status = statusSummary.reduce((acc, item) => {
+      acc[item.status] = item._count;
+      return acc;
+    }, {});
 
     return {
       data,
       meta: buildPaginationMeta(total, page, limit),
+      status,
     };
   }
   async update(

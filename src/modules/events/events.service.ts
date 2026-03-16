@@ -43,9 +43,17 @@ export class EventsService {
     });
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} event`;
-  // }
+  findOne(id: string) {
+    return this.prisma.$transaction(async (tx) => {
+      const findEvent = await tx.event.findUnique({
+        where: { id },
+        include: {
+          seats: true,
+        },
+      });
+      return findEvent;
+    });
+  }
 
   // update(id: number, updateEventDto: UpdateEventDto) {
   //   return `This action updates a #${id} event`;
