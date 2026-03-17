@@ -91,12 +91,14 @@ import { CreateRegistrationDto } from './dto/create-registration.dto';
 import * as registrationRepositoryInterface from './repository/registration.interface';
 import { UpdateRegistrationDto } from './dto/update-registration.dto';
 import { PaginationDto } from 'src/common/utils/dto/pagination.dto';
+import { WebsocketGateway } from 'src/websocket/websocket.gateway';
 
 @Injectable()
 export class RegistrationService {
   constructor(
     @Inject('IREGISTRATION_REPOSITORY') // อ้างอิงจาก Token ที่ตั้งไว้ใน Module
     private readonly registrationRepo: registrationRepositoryInterface.IRegistrationRepository,
+    private readonly websocketGateway: WebsocketGateway,
   ) {}
 
   async create(dto: CreateRegistrationDto) {
@@ -112,6 +114,7 @@ export class RegistrationService {
     if (existingName)
       throw new BadRequestException('ชื่อนี้ทำการลงทะเบียนไปแล้ว');
     const create = await this.registrationRepo.create(dto);
+    this.websocketGateway.emitRegistrationCreated(create);
     return {
       success: 'true',
       data: create,
@@ -119,6 +122,7 @@ export class RegistrationService {
   }
   async findAll(query: PaginationDto) {
     console.log(query, 'query');
+
     return await this.registrationRepo.findAll(query);
   }
   async findOne(id: string) {

@@ -3,9 +3,10 @@ import { RegistrationService } from './registration.service';
 import { RegistrationController } from './registration.controller';
 import { PrismaModule } from 'src/modules/prisma/prisma.module';
 import { PrismaRegistrationRepository } from './repository/registration.repository';
+import { WebsocketModule } from 'src/websocket/websocket.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, WebsocketModule], // ✅ ถูก
   controllers: [RegistrationController],
   providers: [
     RegistrationService,
