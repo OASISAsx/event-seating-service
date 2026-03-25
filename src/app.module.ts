@@ -15,19 +15,23 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.DATABASE_URL!),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
-      serveRoot: '/uploads',
-    }),
-    UploadModule,
-    WebsocketModule,
-    AuthModule,
-    PrismaModule,
+    // ✅ ต้องอยู่บนสุด
     ConfigModule.forRoot({
       isGlobal: true,
     }),
 
+    // ✅ ตอนนี้ env โหลดแล้ว
+    MongooseModule.forRoot(process.env.DATABASE_URL!),
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
+
+    UploadModule,
+    WebsocketModule,
+    AuthModule,
+    PrismaModule,
     RegistrationModule,
     EventsModule,
   ],
