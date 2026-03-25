@@ -35,6 +35,9 @@ importers:
       '@nestjs/platform-socket.io':
         specifier: ^11.1.17
         version: 11.1.17(@nestjs/common@11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/websockets@11.1.17)(rxjs@7.8.2)
+      '@nestjs/serve-static':
+        specifier: ^5.0.4
+        version: 5.0.4(@nestjs/common@11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.14)(express@5.2.1)
       '@nestjs/websockets':
         specifier: ^11.1.17
         version: 11.1.17(@nestjs/common@11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.14)(@nestjs/platform-socket.io@11.1.17)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -56,6 +59,9 @@ importers:
       mongoose:
         specifier: ^9.2.1
         version: 9.2.1
+      multer:
+        specifier: ^2.1.1
+        version: 2.1.1
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -71,6 +77,9 @@ importers:
       socket.io:
         specifier: ^4.8.3
         version: 4.8.3
+      uuid:
+        specifier: ^13.0.0
+        version: 13.0.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0
@@ -96,6 +105,9 @@ importers:
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
+      '@types/multer':
+        specifier: ^2.1.0
+        version: 2.1.0
       '@types/node':
         specifier: ^22.10.7
         version: 22.19.11
@@ -105,6 +117,9 @@ importers:
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.3
+      '@types/uuid':
+        specifier: ^11.0.0
+        version: 11.0.0
       eslint:
         specifier: ^9.18.0
         version: 9.39.3(jiti@2.6.1)
@@ -792,6 +807,22 @@ packages:
     peerDependencies:
       typescript: '>=4.8.2'
 
+  '@nestjs/serve-static@5.0.4':
+    resolution: {integrity: sha512-3kO1M9D3vsPyWPFardxIjUYeuolS58PnhCoBTkS7t3BrdZFZCKHnBZ15js+UOzOR2Q6HmD7ssGjLd0DVYVdvOw==}
+    peerDependencies:
+      '@fastify/static': ^8.0.4
+      '@nestjs/common': ^11.0.2
+      '@nestjs/core': ^11.0.2
+      express: ^5.0.1
+      fastify: ^5.2.1
+    peerDependenciesMeta:
+      '@fastify/static':
+        optional: true
+      express:
+        optional: true
+      fastify:
+        optional: true
+
   '@nestjs/testing@11.1.14':
     resolution: {integrity: sha512-cQxX0ronsTbpfHz8/LYOVWXxoTxv6VoxrnuZoQaVX7QV2PSMqxWE7/9jSQR0GcqAFUEmFP34c6EJqfkjfX/k4Q==}
     peerDependencies:
@@ -973,6 +1004,9 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
+  '@types/multer@2.1.0':
+    resolution: {integrity: sha512-zYZb0+nJhOHtPpGDb3vqPjwpdeGlGC157VpkqNQL+UU2qwoacoQ7MpsAmUptI/0Oa127X32JzWDqQVEXp2RcIA==}
+
   '@types/node@22.19.11':
     resolution: {integrity: sha512-BH7YwL6rA93ReqeQS1c4bsPpcfOmJasG+Fkr6Y59q83f9M1WcBRHR2vM+P9eOisYRcN3ujQoiZY8uk5W+1WL8w==}
 
@@ -1005,6 +1039,10 @@ packages:
 
   '@types/supertest@6.0.3':
     resolution: {integrity: sha512-8WzXq62EXFhJ7QsH3Ocb/iKQ/Ty9ZVWnVzoTKc9tyyFRRF3a74Tk2+TLFgaFFw364Ere+npzHKEJ6ga2LzIL7w==}
+
+  '@types/uuid@11.0.0':
+    resolution: {integrity: sha512-HVyk8nj2m+jcFRNazzqyVKiZezyhDKrGUA3jlEcg/nZ6Ms+qHwocba1Y/AaVaznJTAM9xpdFSh+ptbNrhOGvZA==}
+    deprecated: This is a stub types definition. uuid provides its own type definitions, so you do not need this installed.
 
   '@types/validator@13.15.10':
     resolution: {integrity: sha512-T8L6i7wCuyoK8A/ZeLYt1+q0ty3Zb9+qbSSvrIVitzT3YjZqkTZ40IbRsPanlB4h1QB3JVL1SYCdR6ngtFYcuA==}
@@ -2632,6 +2670,10 @@ packages:
     resolution: {integrity: sha512-u7f2xaZ/UG8oLXHvtF/oWTRvT44p9ecwBBqTwgJVq0+4BW1g8OW01TyMEGWBHbyMOYVHXslaut7qEQ1meATXgw==}
     engines: {node: '>= 10.16.0'}
 
+  multer@2.1.1:
+    resolution: {integrity: sha512-mo+QTzKlx8R7E5ylSXxWzGoXoZbOsRMpyitcht8By2KHvMbf3tjwosZ/Mu/XYU6UuJ3VZnODIrak5ZrPiPyB6A==}
+    engines: {node: '>= 10.16.0'}
+
   mute-stream@2.0.0:
     resolution: {integrity: sha512-WWdIxpyjEn+FhQJQQv9aQAYlHoNVdzIzUySNV1gHUPDSdZJ3yZn7pAAbQcV7B56Mvu881q9FZV+0Vx2xC44VWA==}
     engines: {node: ^18.17.0 || >=20.5.0}
@@ -3335,6 +3377,10 @@ packages:
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
+
+  uuid@13.0.0:
+    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
+    hasBin: true
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -4293,6 +4339,14 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
+  '@nestjs/serve-static@5.0.4(@nestjs/common@11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.14)(express@5.2.1)':
+    dependencies:
+      '@nestjs/common': 11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core': 11.1.14(@nestjs/common@11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.14)(@nestjs/websockets@11.1.17)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      path-to-regexp: 8.3.0
+    optionalDependencies:
+      express: 5.2.1
+
   '@nestjs/testing@11.1.14(@nestjs/common@11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.14)(@nestjs/platform-express@11.1.14)':
     dependencies:
       '@nestjs/common': 11.1.14(class-transformer@0.5.1)(class-validator@0.14.3)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -4492,6 +4546,10 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
+  '@types/multer@2.1.0':
+    dependencies:
+      '@types/express': 5.0.6
+
   '@types/node@22.19.11':
     dependencies:
       undici-types: 6.21.0
@@ -4536,6 +4594,10 @@ snapshots:
     dependencies:
       '@types/methods': 1.1.4
       '@types/superagent': 8.1.9
+
+  '@types/uuid@11.0.0':
+    dependencies:
+      uuid: 13.0.0
 
   '@types/validator@13.15.10': {}
 
@@ -6348,6 +6410,13 @@ snapshots:
       type-is: 1.6.18
       xtend: 4.0.2
 
+  multer@2.1.1:
+    dependencies:
+      append-field: 1.0.0
+      busboy: 1.6.0
+      concat-stream: 2.0.0
+      type-is: 1.6.18
+
   mute-stream@2.0.0: {}
 
   napi-postinstall@0.3.4: {}
@@ -7061,6 +7130,8 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   utils-merge@1.0.1: {}
+
+  uuid@13.0.0: {}
 
   v8-compile-cache-lib@3.0.1: {}
 

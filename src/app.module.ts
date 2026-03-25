@@ -1,3 +1,4 @@
+import { UploadModule } from './modules/uploads/upload.module';
 import { WebsocketModule } from './websocket/websocket.module';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -8,9 +9,13 @@ import { ConfigModule } from '@nestjs/config';
 import { RegistrationModule } from './modules/registration/registration.module';
 import { EventsModule } from './modules/events/events.module';
 import { WebsocketGateway } from './websocket/websocket.gateway';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
+    MongooseModule.forRoot(process.env.DATABASE_URL!),
+
+    UploadModule,
     WebsocketModule,
     AuthModule,
     PrismaModule,
