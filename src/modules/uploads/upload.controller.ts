@@ -21,10 +21,11 @@ export class UploadController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ) {
+    console.log(file, 'file');
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const saved = await this.uploadService.saveImage(file, baseUrl);
     return {
-      //   id: saved.id,
+      id: saved.id,
       url: saved.url,
       filename: saved.filename,
       size: saved.size,

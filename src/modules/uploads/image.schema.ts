@@ -6,6 +6,7 @@ export type ImageDocument = Image & Document;
 
 @Schema({ timestamps: true })
 export class Image {
+  id: string;
   @Prop({ required: true })
   originalName: string;
 
