@@ -1,6 +1,8 @@
 services:
   backend:
-    image: ghcr.io/oasisasx/event-seating-service:build
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: eventSeat-backend-1
     ports:
       - '3002:3001'
