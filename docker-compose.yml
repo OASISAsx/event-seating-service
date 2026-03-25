@@ -10,7 +10,7 @@ services:
       - .env
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/mydb
+      - DATABASE_URL=mongodb://mongo:27017/mydb
     depends_on:
       mongo:
         condition: service_healthy
