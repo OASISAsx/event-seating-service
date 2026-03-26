@@ -15,11 +15,11 @@ model Admin {
 }
 
 model Event {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String?
   location    String?
-
+  imageEvent  String?
   startDate   DateTime
   endDate     DateTime
   seatsPerRow Int

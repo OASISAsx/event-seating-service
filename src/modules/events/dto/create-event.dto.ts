@@ -17,6 +17,9 @@ export class CreateEventDto {
   @IsString()
   location: string;
 
+  @IsString()
+  imageEvent: string;
+
   @Type(() => Date)
   @IsDate()
   startDate: Date;
