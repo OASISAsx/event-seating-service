@@ -8,6 +8,10 @@ pipeline {
     environment {
         PNPM_HOME = "${env.WORKSPACE}/.pnpm"
         PATH = "${env.PNPM_HOME}:${env.PATH}"
+
+        SSH_USERNAME = 'root'                // เช่น root หรือ ubuntu
+        SSH_HOST     = '76.13.180.132'    // ไอพีของเซิร์ฟเวอร์ปลายทาง
+        DEPLOY_PATH  = '/var/www/api-eventSeat'
     }
 
     stages {
