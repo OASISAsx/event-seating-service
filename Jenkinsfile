@@ -48,19 +48,17 @@ pipeline {
         }
 
         // ─── Deploy (เฉพาะ branch "build") ────────────────────
-        stage('Deploy') {
-            
+       stage('Deploy') {
             steps {
                 sshagent(credentials: ['ssh-deploy-key']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no \\
-                            \${SSH_USERNAME}@\${SSH_HOST} \\
-                            'cd \${DEPLOY_PATH} && \\
-                             git pull origin build && \\
-                             docker compose down && \\
-                             docker compose up -d --build && \\
-                             docker compose ps && \\
-                             echo "✅ Deploy สำเร็จ"'
+                        ssh -o StrictHostKeyChecking=no ${SSH_USERNAME}@${SSH_HOST} \
+                        "cd ${DEPLOY_PATH} && \
+                         git pull origin build && \
+                         docker compose down && \
+                         docker compose up -d --build && \
+                         docker compose ps && \
+                         echo '✅ Deploy สำเร็จ'"
                     """
                 }
             }
