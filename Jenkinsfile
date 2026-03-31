@@ -45,9 +45,7 @@ pipeline {
 
         // ─── Deploy (เฉพาะ branch "build") ────────────────────
         stage('Deploy') {
-            when {
-                branch 'build'
-            }
+            
             steps {
                 sshagent(credentials: ['ssh-deploy-key']) {
                     sh """
