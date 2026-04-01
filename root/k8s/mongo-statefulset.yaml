@@ -1,8 +1,8 @@
 # ========================
-# mongo-statefulset.yaml (dev/test)
+# mongo-statefulset.yaml
 # ========================
 
-# 1️⃣ PersistentVolume (สำหรับ single-node local cluster)
+# 1️⃣ PersistentVolume
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -13,9 +13,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /mnt/data/mongo # ต้องสร้าง path จริงบน Node
+    path: /mnt/data/mongo
 ---
-# 2️⃣ Headless Service สำหรับ MongoDB StatefulSet
+# 2️⃣ Headless Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -28,7 +28,7 @@ spec:
     - port: 27017
       targetPort: 27017
 ---
-# 3️⃣ StatefulSet ของ MongoDB (single node, dev/test)
+# 3️⃣ StatefulSet ของ MongoDB (Local dev, ไม่มี replica set)
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -46,8 +46,7 @@ spec:
     spec:
       containers:
         - name: mongo
-          image: mongo:7
-          args: ['--bind_ip_all'] # <-- เอา --replSet ออก
+          image: mongo:6
           ports:
             - containerPort: 27017
           env:
