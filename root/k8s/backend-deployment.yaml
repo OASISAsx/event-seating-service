@@ -12,6 +12,10 @@ spec:
       labels:
         app: backend
     spec:
+      tolerations: # <-- ใส่ตรงนี้
+        - key: 'node-role.kubernetes.io/control-plane'
+          operator: 'Exists'
+          effect: 'NoSchedule'
       containers:
         - name: backend
           image: yourusername/eventseat-backend:latest
