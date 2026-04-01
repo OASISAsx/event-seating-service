@@ -12,13 +12,13 @@ spec:
       labels:
         app: backend
     spec:
-      tolerations: # <-- ใส่ตรงนี้
+      tolerations:
         - key: 'node-role.kubernetes.io/control-plane'
           operator: 'Exists'
           effect: 'NoSchedule'
       containers:
         - name: backend
-          image: docker.io/oasisforsaken/eventseat-backend:latest
+          image: docker.io/oasisasx/eventseat-backend:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3001
@@ -27,3 +27,5 @@ spec:
               value: 'production'
             - name: DATABASE_URL
               value: 'mongodb://mongo:27017/mydb?replicaSet=rs0'
+            - name: JWT_SECRET
+              value: 'supersecret123' # <-- ใส่ค่าจริงของ JWT secret
