@@ -1,25 +1,27 @@
+# ใช้ Node Alpine
 FROM node:20-alpine
 
+# ตั้ง working directory
 WORKDIR /app
 
-# install pnpm
-RUN npm install -g pnpm
-
-# copy lockfile
+# copy package lock & json
 COPY package.json pnpm-lock.yaml ./
 
-# install dependency
+# install pnpm และ dependencies
+RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
 
-# copy project
+# copy source ทั้งหมด
 COPY . .
 
-# generate prisma
+# generate Prisma client
 RUN pnpm prisma generate
 
-# build nest
+# build NestJS
 RUN pnpm run build
 
-EXPOSE 3000
+# expose port
+EXPOSE 3001
 
+# run NestJS
 CMD ["node", "dist/main.js"]
