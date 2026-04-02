@@ -42,11 +42,7 @@ spec:
       containers:
         - name: mongo
           image: mongo:7
-          args:
-            - '--bind_ip_all'
-            - '--auth'
-            - '--replSet'
-            - 'rs0'
+          args: ['--bind_ip_all', '--replSet', 'rs0']
           ports:
             - containerPort: 27017
           env:
