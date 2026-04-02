@@ -23,7 +23,7 @@ spec:
     - port: 27017
       targetPort: 27017
 ---
-# 3️⃣ StatefulSet MongoDB (Single Node, Auth Enabled)
+# 3️⃣ StatefulSet MongoDB (Single Node, Auth + Replica Set Enabled)
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -42,7 +42,11 @@ spec:
       containers:
         - name: mongo
           image: mongo:7
-          args: ['--bind_ip_all']
+          args:
+            - '--bind_ip_all'
+            - '--auth'
+            - '--replSet'
+            - 'rs0'
           ports:
             - containerPort: 27017
           env:
