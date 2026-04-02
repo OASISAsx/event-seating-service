@@ -10,7 +10,7 @@ spec:
   hostPath:
     path: /mnt/data/mongo
 ---
-# 2️⃣ Headless Service
+# Headless Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,7 +23,7 @@ spec:
     - port: 27017
       targetPort: 27017
 ---
-# 3️⃣ StatefulSet MongoDB (Single Node, Auth + Replica Set Enabled)
+# StatefulSet MongoDB (Single Node, Auth + Replica Set Enabled)
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -62,11 +62,14 @@ spec:
             - name: mongo-keyfile
               mountPath: /etc/mongo-keyfile
               readOnly: true
-
+          securityContext:
+            runAsUser: 999
+            fsGroup: 999
       volumes:
         - name: mongo-keyfile
           secret:
             secretName: mongo-keyfile
+            defaultMode: 0400
   volumeClaimTemplates:
     - metadata:
         name: mongo-data
