@@ -43,24 +43,25 @@ spec:
                   key: JWT_SECRET
           resources:
             requests:
-              cpu: '250m'
-              memory: '512Mi'
-            limits:
               cpu: '500m'
               memory: '1Gi'
+            limits:
+              cpu: '1'
+              memory: '2Gi'
           livenessProbe:
             httpGet:
               path: /health
               port: 3001
-            initialDelaySeconds: 40 # ให้เวลา NestJS boot
+            initialDelaySeconds: 60
             timeoutSeconds: 2
             periodSeconds: 10
             failureThreshold: 3
+
           readinessProbe:
             httpGet:
               path: /health
               port: 3001
-            initialDelaySeconds: 30 # ให้เวลา NestJS boot
+            initialDelaySeconds: 45
             timeoutSeconds: 2
             periodSeconds: 5
             failureThreshold: 3
