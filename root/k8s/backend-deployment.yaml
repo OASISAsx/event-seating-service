@@ -1,3 +1,13 @@
+# backend-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jwt-secret
+type: Opaque
+stringData:
+  JWT_SECRET: supersecret123
+---
+# backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,7 +37,10 @@ spec:
             - name: DATABASE_URL
               value: mongodb://mongo:27017/mydb?replicaSet=rs0
             - name: JWT_SECRET
-              value: supersecret123
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_SECRET
           resources:
             requests:
               cpu: '250m'
@@ -39,16 +52,16 @@ spec:
             httpGet:
               path: /health
               port: 3001
-            initialDelaySeconds: 20
-            timeoutSeconds: 1
+            initialDelaySeconds: 40 # ให้เวลา NestJS boot
+            timeoutSeconds: 2
             periodSeconds: 10
             failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /health
               port: 3001
-            initialDelaySeconds: 15
-            timeoutSeconds: 1
+            initialDelaySeconds: 30 # ให้เวลา NestJS boot
+            timeoutSeconds: 2
             periodSeconds: 5
             failureThreshold: 3
       restartPolicy: Always
