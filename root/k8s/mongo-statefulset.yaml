@@ -38,7 +38,11 @@ spec:
     metadata:
       labels:
         app: mongo
+
     spec:
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
       containers:
         - name: mongo
           image: mongo:7
@@ -62,9 +66,7 @@ spec:
             - name: mongo-keyfile
               mountPath: /etc/mongo-keyfile
               readOnly: true
-          securityContext:
-            runAsUser: 999
-            fsGroup: 999
+
       volumes:
         - name: mongo-keyfile
           secret:
