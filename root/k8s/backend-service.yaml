@@ -7,6 +7,6 @@ spec:
   selector:
     app: backend
   ports:
-    - port: 3001
-      targetPort: 3001
-      nodePort: 30002
+    - port: 3001 # Port ใน Cluster
+      targetPort: 3001 # Port ของ Pod
+      nodePort: 30002 # Port จาก Node (ใช้กับ Ingress)

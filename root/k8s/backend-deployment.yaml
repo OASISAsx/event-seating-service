@@ -30,4 +30,16 @@ spec:
             - name: DATABASE_URL
               value: 'mongodb://mongo:27017/mydb?replicaSet=rs0'
             - name: JWT_SECRET
-              value: 'supersecret123' # <-- ใส่ค่าจริงของ JWT secret
+              value: 'supersecret123'
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 10
