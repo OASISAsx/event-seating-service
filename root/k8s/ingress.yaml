@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: api-ingress
   annotations:
-    # เพิ่ม 2 บรรทัดนี้ครับ
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
-    nginx.ingress.kubernetes.io/backend-protocol: 'HTTP'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false' # ห้าม Redirect ไป HTTPS
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'false' # ห้ามบังคับ SSL
+    nginx.ingress.kubernetes.io/backend-protocol: 'HTTP' # คุยกับ Backend ด้วย HTTP
 spec:
   ingressClassName: nginx
   rules:
