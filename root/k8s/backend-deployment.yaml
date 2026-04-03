@@ -41,12 +41,12 @@ spec:
               memory: '512Mi'
           livenessProbe:
             httpGet:
-              path: / # เปลี่ยนจาก /health เป็น /
+              path: /api
               port: 3001
             initialDelaySeconds: 30
           readinessProbe:
             httpGet:
-              path: / # เปลี่ยนจาก /health เป็น /
+              path: /api
               port: 3001
             initialDelaySeconds: 20
       restartPolicy: Always
