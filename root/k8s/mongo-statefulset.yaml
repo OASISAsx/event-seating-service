@@ -42,15 +42,13 @@ spec:
       containers:
         - name: mongo
           image: mongo:7
-          # ตัด args เรื่อง Replica Set และ Keyfile ออกเพื่อให้รันง่ายที่สุด
-          ports:
-            - containerPort: 27017
           volumeMounts:
-            - name: mongo-data
+            - name: mongo-data # <--- จุดที่ 1: ต้องชื่อนี้
               mountPath: /data/db
+
   volumeClaimTemplates:
     - metadata:
-        name: mongo-name # ต้องตรงกับ volumeMounts
+        name: mongo-data # <--- จุดที่ 2: ต้องเปลี่ยนจาก mongo-name เป็น mongo-data
       spec:
         accessModes: ['ReadWriteOnce']
         storageClassName: manual
