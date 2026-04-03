@@ -3,17 +3,18 @@ kind: Ingress
 metadata:
   name: api-ingress
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false' # ห้าม Redirect ไป HTTPS
-    nginx.ingress.kubernetes.io/force-ssl-redirect: 'false' # ห้ามบังคับ SSL
-    nginx.ingress.kubernetes.io/backend-protocol: 'HTTP' # คุยกับ Backend ด้วย HTTP
+    kubernetes.io/ingress.class: 'nginx'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'false'
+    nginx.ingress.kubernetes.io/rewrite-target: /api/$1 # กรณีต้องการรักษา /api ไว้
 spec:
   ingressClassName: nginx
   rules:
     - host: api.event-seat.elitefund.fun
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /api/?(.*) # ใช้ regex เพื่อดักจับทุก path หลัง /api
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: backend-service
