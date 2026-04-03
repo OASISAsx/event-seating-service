@@ -4,16 +4,23 @@ metadata:
   name: api-ingress
   annotations:
     kubernetes.io/ingress.class: 'nginx'
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
-    nginx.ingress.kubernetes.io/force-ssl-redirect: 'false'
-    nginx.ingress.kubernetes.io/rewrite-target: /api/$1 # กรณีต้องการรักษา /api ไว้
+    # เปลี่ยนเป็น true เพื่อให้ระบบปลอดภัยและบังคับใช้ HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/rewrite-target: /api/$1
 spec:
   ingressClassName: nginx
+  # --- เพิ่มส่วนนี้เข้าไป ---
+  tls:
+    - hosts:
+        - api.event-seat.elitefund.fun
+      secretName: event-seat-tls # <--- ต้องระบุชื่อ Secret ที่เก็บใบเซอร์
+  # -----------------------
   rules:
     - host: api.event-seat.elitefund.fun
       http:
         paths:
-          - path: /api/?(.*) # ใช้ regex เพื่อดักจับทุก path หลัง /api
+          - path: /api/?(.*)
             pathType: ImplementationSpecific
             backend:
               service:
