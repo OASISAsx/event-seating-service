@@ -41,16 +41,12 @@ spec:
               memory: '512Mi'
           livenessProbe:
             httpGet:
-              path: /health
+              path: / # เปลี่ยนจาก /health เป็น /
               port: 3001
-            initialDelaySeconds: 30 # ลดเวลาลงเพื่อให้เขียวเร็วขึ้น
-            timeoutSeconds: 2
-            periodSeconds: 10
+            initialDelaySeconds: 30
           readinessProbe:
             httpGet:
-              path: /health
+              path: / # เปลี่ยนจาก /health เป็น /
               port: 3001
             initialDelaySeconds: 20
-            timeoutSeconds: 2
-            periodSeconds: 5
       restartPolicy: Always
