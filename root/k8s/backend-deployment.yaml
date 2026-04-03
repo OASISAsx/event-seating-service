@@ -1,13 +1,3 @@
-# backend-secret.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: jwt-secret
-type: Opaque
-stringData:
-  JWT_SECRET: supersecret123
----
-# backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,7 +25,8 @@ spec:
             - name: NODE_ENV
               value: production
             - name: DATABASE_URL
-              value: mongodb://mongo:27017/mydb?replicaSet=rs0
+              # แก้ไข: ตัด replicaSet ออกเพื่อให้ต่อกับ Single Mongo ได้
+              value: mongodb://mongo:27017/event_service
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
@@ -43,39 +34,23 @@ spec:
                   key: JWT_SECRET
           resources:
             requests:
-              cpu: '500m'
-              memory: '1Gi'
+              cpu: '100m' # ปรับลดเพื่อให้รันบน VPS ได้ง่ายขึ้น
+              memory: '256Mi'
             limits:
-              cpu: '1'
-              memory: '2Gi'
+              cpu: '500m'
+              memory: '512Mi'
           livenessProbe:
             httpGet:
               path: /health
               port: 3001
-            initialDelaySeconds: 60
+            initialDelaySeconds: 30 # ลดเวลาลงเพื่อให้เขียวเร็วขึ้น
             timeoutSeconds: 2
             periodSeconds: 10
-            failureThreshold: 3
-
           readinessProbe:
             httpGet:
               path: /health
               port: 3001
-            initialDelaySeconds: 45
+            initialDelaySeconds: 20
             timeoutSeconds: 2
             periodSeconds: 5
-            failureThreshold: 3
       restartPolicy: Always
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-service
-spec:
-  selector:
-    app: backend
-  ports:
-    - protocol: TCP
-      port: 3001
-      targetPort: 3001
-  type: ClusterIP
