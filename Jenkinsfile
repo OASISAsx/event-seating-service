@@ -155,12 +155,13 @@ pipeline {
                 sshagent(credentials: ['ssh-deploy-key']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${SSH_USERNAME}@${SSH_HOST} "
-                            # สั่ง apply ทั้งโฟลเดอร์ k8s เลยเพื่อให้ครบทุก Service
                             kubectl apply -f ${K8S_PATH}/
-                            
-                            # บังคับอัปเดต Image เฉพาะ backend (ถ้า YAML ยังไม่ได้แก้เป็น oasisforsaken)
                             kubectl set image deployment/backend backend=${IMAGE_NAME}:${IMAGE_TAG}
                             
+                            # 1. สั่ง Restart ทันทีเพื่อดึง Image ใหม่
+                            kubectl rollout restart deployment/backend
+                            
+                            # 2. รอจนกว่าตัวที่ Restart ใหม่จะ Ready 100%
                             kubectl rollout status deployment/backend
                         "
                     """
