@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'API for event seating service is running CICD pipeline';
+    return 'API for event seating service is running test loadBalancer';
   }
 }

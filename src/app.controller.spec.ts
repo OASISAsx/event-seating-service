@@ -17,7 +17,7 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return "Hello World!"', () => {
       expect(appController.getHello()).toBe(
-        'API for event seating service is running CICD pipeline',
+        'API for event seating service is running test loadBalancer',
       );
     });
   });
