@@ -5,7 +5,12 @@ metadata:
   labels:
     app: backend
 spec:
-  replicas: 2
+  replicas: 2 # รัน 2 Pods เพื่อทำ Load Balancing
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # ระหว่างอัปเดต ยอมให้มี Pod เกินมาได้ 1 ตัว (รวมเป็น 3)
+      maxUnavailable: 0 # ห้ามปิดตัวเก่าจนกว่าตัวใหม่จะรันได้ 100% (กันเว็บล่ม)
   selector:
     matchLabels:
       app: backend
@@ -17,6 +22,7 @@ spec:
       containers:
         - name: backend
           image: oasisforsaken/eventseat-backend:latest
+          imagePullPolicy: Always # บังคับให้ดึง Image ใหม่จาก Docker Hub ทุกครั้งที่ Deploy
           ports:
             - containerPort: 3001
           env:
@@ -25,7 +31,6 @@ spec:
             - name: NODE_ENV
               value: production
             - name: DATABASE_URL
-              # แก้ไข: ตัด replicaSet ออกเพื่อให้ต่อกับ Single Mongo ได้
               value: mongodb://mongo:27017/event_service
             - name: JWT_SECRET
               valueFrom:
@@ -34,19 +39,26 @@ spec:
                   key: JWT_SECRET
           resources:
             requests:
-              cpu: '100m' # ปรับลดเพื่อให้รันบน VPS ได้ง่ายขึ้น
+              cpu: '100m'
               memory: '256Mi'
             limits:
               cpu: '500m'
               memory: '512Mi'
+
+          # ตรวจสอบว่าแอปยัง "มีชีวิต" อยู่ไหม (ถ้าค้าง ให้ Restart)
           livenessProbe:
             httpGet:
               path: /api
               port: 3001
             initialDelaySeconds: 30
+            periodSeconds: 10
+
+          # ตรวจสอบว่าแอป "พร้อมรับลูกค้า" หรือยัง (ถ้าผ่าน Load Balancer ถึงจะส่งงานให้)
           readinessProbe:
             httpGet:
               path: /api
               port: 3001
-            initialDelaySeconds: 20
+            initialDelaySeconds: 15 # ลดลงจาก 20 เพื่อให้สลับเวอร์ชันไวขึ้น
+            periodSeconds: 5
+
       restartPolicy: Always
