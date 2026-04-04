@@ -86,7 +86,7 @@ pipeline {
         PNPM_HOME = "${env.WORKSPACE}/.pnpm"
         PATH = "${env.PNPM_HOME}:${env.PATH}"
 
-        IMAGE_NAME = "yourdockerhub/eventseat-backend"
+        IMAGE_NAME = "oasisforsaken/eventseat-backend"
         IMAGE_TAG  = "latest"
 
         SSH_USERNAME = 'root'
