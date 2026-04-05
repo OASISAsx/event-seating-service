@@ -114,7 +114,10 @@ export class RegistrationService {
     if (existingName)
       throw new BadRequestException('ชื่อนี้ทำการลงทะเบียนไปแล้ว');
     const create = await this.registrationRepo.create(dto);
-    this.websocketGateway.emitRegistrationCreated(create);
+    const dataWithJoin = await this.registrationRepo.findOne(create.id!);
+
+    // 4. ส่งข้อมูลที่มี Join ครบแล้วออกไปทาง Socket
+    this.websocketGateway.emitRegistrationCreated(dataWithJoin);
     return {
       success: 'true',
       data: create,
@@ -125,6 +128,7 @@ export class RegistrationService {
 
     return await this.registrationRepo.findAll(query);
   }
+
   async findOne(id: string) {
     const data = await this.registrationRepo.findOne(id);
     return {
@@ -132,6 +136,7 @@ export class RegistrationService {
       data: data,
     };
   }
+
   async update(id: string, dto: UpdateRegistrationDto) {
     if (!dto.seatId) throw new BadRequestException('ระบุที่นั่ง');
     const update = await this.registrationRepo.update(id, dto);

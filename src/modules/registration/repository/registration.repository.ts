@@ -26,6 +26,14 @@ export class PrismaRegistrationRepository implements IRegistrationRepository {
       where: { id },
       include: {
         seat: true,
+        event: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            seats: true,
+          },
+        },
       },
     });
     console.log(getOne, 'getOne');

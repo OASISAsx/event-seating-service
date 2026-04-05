@@ -32,6 +32,7 @@ describe('EventsController', () => {
       name: 'test Event',
       description: 'test description',
       location: '0999999999',
+      imageEvent: 'https://example.com/image.jpg',
       startDate: new Date('2026-03-01'),
       endDate: new Date('2026-03-02'),
       seatsPerRow: 20,
