@@ -11,6 +11,7 @@ import { EventsModule } from './modules/events/events.module';
 import { WebsocketGateway } from './websocket/websocket.gateway';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { LoggerModule } from 'nestjs-pino';
 import { join } from 'path';
 
 @Module({
@@ -21,6 +22,13 @@ import { join } from 'path';
     }),
 
     // ✅ ตอนนี้ env โหลดแล้ว
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.NODE_ENV === 'production' ? 'error' : 'debug',
+        autoLogging: false,
+      },
+    }),
+
     MongooseModule.forRoot(process.env.DATABASE_URL!),
 
     ServeStaticModule.forRoot({
