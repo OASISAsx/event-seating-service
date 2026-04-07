@@ -1,25 +1,17 @@
 import { Module } from '@nestjs/common';
-import { MulterModule } from '@nestjs/platform-express';
 import { MongooseModule } from '@nestjs/mongoose';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { MulterModule } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
+import { S3Service } from 'src/common/utils/s3.service';
+import { Image, ImageSchema } from './image.schema';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
-import { Image, ImageSchema } from './image.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Image.name, schema: ImageSchema }]),
     MulterModule.register({
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, cb) => {
-          const unique = uuidv4();
-          const ext = extname(file.originalname);
-          cb(null, `${unique}${ext}`);
-        },
-      }),
+      storage: memoryStorage(),
       fileFilter: (req, file, cb) => {
         const allowed = /image\/(jpeg|jpg|png|webp|gif)/;
         if (allowed.test(file.mimetype)) {
@@ -32,6 +24,6 @@ import { Image, ImageSchema } from './image.schema';
     }),
   ],
   controllers: [UploadController],
-  providers: [UploadService],
+  providers: [UploadService, S3Service],
 })
 export class UploadModule {}
