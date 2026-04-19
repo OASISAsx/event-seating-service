@@ -13,6 +13,7 @@ import { RegistrationModule } from './modules/registration/registration.module';
 import { UploadModule } from './modules/uploads/upload.module';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketGateway } from './websocket/websocket.gateway';
+import { ChatModule } from './modules/chat/chat.module';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const logFile =
