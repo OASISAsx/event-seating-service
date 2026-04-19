@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat API Test</title>
+    <script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        padding: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        margin-bottom: 15px;
+        color: #333;
+      }
+      input,
+      button {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      input {
+        width: 200px;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      button:disabled {
+        background: #ccc;
+      }
+      .status {
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+      }
+      .status.connected {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status.disconnected {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      #messages {
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 4px;
+      }
+      .message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        background: #f8f9fa;
+      }
+      .message .meta {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+      .message .content {
+        font-size: 14px;
+      }
+      .message.join {
+        background: #d4edda;
+      }
+      .message.leave {
+        background: #f8d7da;
+      }
+      .typing {
+        font-style: italic;
+        color: #666;
+        font-size: 12px;
+      }
+      #roomInfo {
+        background: #e9ecef;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎭 Event Seating - Chat API Test</h1>
+      <br />
+
+      <div class="card">
+        <h2>Connection</h2>
+        <div id="connectionStatus" class="status disconnected">
+          Disconnected
+        </div>
+        <input type="text" id="userId" placeholder="User ID" value="user123" />
+        <button id="connectBtn" onclick="connect()">Connect</button>
+        <button id="disconnectBtn" onclick="disconnect()" disabled>
+          Disconnect
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>Room Management</h2>
+        <input type="text" id="roomId" placeholder="Room ID" value="room1" />
+        <button id="joinBtn" onclick="joinRoom()" disabled>Join Room</button>
+        <button id="leaveBtn" onclick="leaveRoom()" disabled>Leave Room</button>
+        <div id="roomInfo" style="display: none">
+          <strong>Current Room:</strong> <span id="currentRoom"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Send Message</h2>
+        <input
+          type="text"
+          id="messageContent"
+          placeholder="Type your message..."
+          style="width: 400px"
+          onkeypress="handleTyping()"
+        />
+        <button id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+      </div>
+
+      <div class="card">
+        <h2>Messages</h2>
+        <div id="messages"></div>
+        <div id="typingIndicator" class="typing"></div>
+      </div>
+    </div>
+
+    <script>
+      let socket;
+      let currentRoom = null;
+      let typingTimeout;
+
+      function connect() {
+        const userId = document.getElementById('userId').value;
+        socket = io('http://localhost:8080/chat', {
+          query: { userId },
+        });
+
+        socket.on('connect', () => {
+          updateStatus(true);
+          console.log('Connected to chat server');
+        });
+
+        socket.on('disconnect', () => {
+          updateStatus(false);
+          console.log('Disconnected from chat server');
+        });
+
+        socket.on('new-message', (message) => {
+          addMessage(message);
+        });
+
+        socket.on('user-joined', (data) => {
+          console.log('User joined:', data);
+          addSystemMessage(`${data.userId} joined the room`, 'join');
+        });
+
+        socket.on('user-left', (data) => {
+          console.log('User left:', data);
+          addSystemMessage(`${data.userId} left the room`, 'leave');
+        });
+
+        socket.on('user-typing', (data) => {
+          const indicator = document.getElementById('typingIndicator');
+          if (data.isTyping) {
+            indicator.textContent = `${data.userId} is typing...`;
+            setTimeout(() => {
+              indicator.textContent = '';
+            }, 2000);
+          }
+        });
+      }
+
+      function disconnect() {
+        if (socket) {
+          socket.disconnect();
+          socket = null;
+        }
+        updateStatus(false);
+      }
+
+      function joinRoom() {
+        const roomId = document.getElementById('roomId').value;
+        socket.emit('join-room', { roomId }, (response) => {
+          if (response.status === 'success') {
+            currentRoom = roomId;
+            document.getElementById('currentRoom').textContent = roomId;
+            document.getElementById('roomInfo').style.display = 'block';
+            document.getElementById('joinBtn').disabled = true;
+            document.getElementById('leaveBtn').disabled = false;
+            document.getElementById('sendBtn').disabled = false;
+            console.log('Joined room:', roomId);
+          }
+        });
+      }
+
+      function leaveRoom() {
+        if (currentRoom) {
+          socket.emit('leave-room', { roomId: currentRoom }, (response) => {
+            if (response.status === 'success') {
+              document.getElementById('roomInfo').style.display = 'none';
+              document.getElementById('joinBtn').disabled = false;
+              document.getElementById('leaveBtn').disabled = true;
+              document.getElementById('sendBtn').disabled = true;
+              currentRoom = null;
+              console.log('Left room');
+            }
+          });
+        }
+      }
+
+      function sendMessage() {
+        const content = document.getElementById('messageContent').value;
+        if (content.trim() && currentRoom) {
+          socket.emit(
+            'send-message',
+            {
+              roomId: currentRoom,
+              content: content.trim(),
+            },
+            (response) => {
+              if (response.status === 'success') {
+                document.getElementById('messageContent').value = '';
+                console.log('Message sent');
+              }
+            },
+          );
+        }
+      }
+
+      function handleTyping() {
+        if (currentRoom) {
+          socket.emit('typing', { roomId: currentRoom, isTyping: true });
+          clearTimeout(typingTimeout);
+          typingTimeout = setTimeout(() => {
+            socket.emit('typing', { roomId: currentRoom, isTyping: false });
+          }, 1000);
+        }
+      }
+
+      function updateStatus(connected) {
+        const status = document.getElementById('connectionStatus');
+        if (connected) {
+          status.textContent = 'Connected';
+          status.className = 'status connected';
+          document.getElementById('connectBtn').disabled = true;
+          document.getElementById('disconnectBtn').disabled = false;
+          document.getElementById('joinBtn').disabled = false;
+        } else {
+          status.textContent = 'Disconnected';
+          status.className = 'status disconnected';
+          document.getElementById('connectBtn').disabled = false;
+          document.getElementById('disconnectBtn').disabled = true;
+          document.getElementById('joinBtn').disabled = true;
+          document.getElementById('leaveBtn').disabled = true;
+          document.getElementById('sendBtn').disabled = true;
+        }
+      }
+
+      function addMessage(message) {
+        const messagesDiv = document.getElementById('messages');
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${message.type}`;
+        messageEl.innerHTML = `
+                <div class="meta">
+                    <strong>${message.senderId}</strong> - ${new Date(message.timestamp).toLocaleString()}
+                    ${message.type !== 'message' ? `(${message.type})` : ''}
+                </div>
+                <div class="content">${message.content}</div>
+            `;
+        messagesDiv.appendChild(messageEl);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      function addSystemMessage(text, type) {
+        const messagesDiv = document.getElementById('messages');
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${type}`;
+        messageEl.innerHTML = `
+                <div class="content"><em>${text}</em></div>
+            `;
+        messagesDiv.appendChild(messageEl);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      function handleEnterKey(event) {
+        if (event.key === 'Enter') {
+          sendMessage();
+        }
+      }
+
+      document
+        .getElementById('messageContent')
+        .addEventListener('keypress', handleEnterKey);
+    </script>
+  </body>
+</html>

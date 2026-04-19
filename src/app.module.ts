@@ -12,6 +12,7 @@ import { WebsocketGateway } from './websocket/websocket.gateway';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { join } from 'path';
 
     UploadModule,
     WebsocketModule,
+    ChatModule,
     AuthModule,
     PrismaModule,
     RegistrationModule,

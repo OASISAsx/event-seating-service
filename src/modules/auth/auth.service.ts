@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { AdminListItem } from './dto/admin.dto/admin.dto';
 
 @Injectable()
 export class AuthService {
@@ -41,11 +42,38 @@ export class AuthService {
 
     const admin = await this.prisma.admin.create({
       data: {
-        username: 'admin',
+        username: 'admin3',
         password: hashedPassword,
       },
     });
 
     return admin;
+  }
+
+  async getAdmins(currentAdminId?: string): Promise<AdminListItem[]> {
+    const admins = await this.prisma.admin.findMany({
+      select: {
+        id: true,
+        username: true,
+      },
+      orderBy: {
+        username: 'asc',
+      },
+    });
+
+    return admins
+      .filter((admin) => admin.id !== currentAdminId)
+      .map((admin) => ({
+        id: admin.id,
+        username: admin.username,
+        roomId: currentAdminId
+          ? this.createDirectRoomId(currentAdminId, admin.id)
+          : null,
+      }));
+  }
+
+  private createDirectRoomId(currentAdminId: string, targetAdminId: string) {
+    const participantIds = [currentAdminId, targetAdminId].sort();
+    return `direct:${participantIds.join(':')}`;
   }
 }

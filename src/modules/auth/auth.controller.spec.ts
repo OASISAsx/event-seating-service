@@ -7,6 +7,7 @@ describe('AuthController', () => {
 
   const mockAuthService = {
     login: jest.fn(),
+    getAdmins: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -25,6 +26,27 @@ describe('AuthController', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should call authService.getAdmins with current admin id', async () => {
+    mockAuthService.getAdmins.mockResolvedValue([
+      {
+        id: 'admin-2',
+        username: 'admin2',
+        roomId: 'direct:admin-1:admin-2',
+      },
+    ]);
+
+    const result = await controller.getAdmins('admin-1');
+
+    expect(mockAuthService.getAdmins).toHaveBeenCalledWith('admin-1');
+    expect(result).toEqual([
+      {
+        id: 'admin-2',
+        username: 'admin2',
+        roomId: 'direct:admin-1:admin-2',
+      },
+    ]);
   });
 
   it('should call authService.login with correct params', async () => {
