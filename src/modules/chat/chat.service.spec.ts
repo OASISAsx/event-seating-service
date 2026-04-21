@@ -136,10 +136,12 @@ describe('ChatService', () => {
       await service.publishMessage(testRoomId, testMessage, 'message');
 
       expect(mockChannel.publish.mock.calls).toHaveLength(1);
-      expect(mockChannel.publish).toHaveBeenCalledWith(
-        'chat.messages',
-        `room.${testRoomId}`,
-        expect.any(Buffer),
+      const [exchange, routingKey, payload, options] =
+        mockChannel.publish.mock.calls[0];
+      expect(exchange).toBe('chat.messages');
+      expect(routingKey).toBe(`room.${testRoomId}`);
+      expect(payload).toEqual(expect.any(Buffer));
+      expect(options).toEqual(
         expect.objectContaining({
           persistent: true,
           contentType: 'application/json',
