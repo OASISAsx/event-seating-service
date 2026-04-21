@@ -267,24 +267,21 @@ describe('ChatService', () => {
   });
 
   describe('message consumption', () => {
-    it('should skip messages published by the same service instance', async () => {
+    it('should forward consumed messages to the gateway', async () => {
       await service.onModuleInit();
 
       const consumeHandler = mockChannel.consume.mock.calls[0][1];
-      const instanceId = (service as any).instanceId;
+      const message = {
+        roomId: 'room-1',
+        data: { id: 'msg-1', roomId: 'room-1' },
+        type: 'message',
+      };
 
       await consumeHandler({
-        content: Buffer.from(
-          JSON.stringify({
-            roomId: 'room-1',
-            data: { id: 'msg-1', roomId: 'room-1' },
-            type: 'message',
-            originInstanceId: instanceId,
-          }),
-        ),
+        content: Buffer.from(JSON.stringify(message)),
       });
 
-      expect(mockChatGateway.receiveMessage).not.toHaveBeenCalled();
+      expect(mockChatGateway.receiveMessage).toHaveBeenCalledWith(message);
       expect(mockChannel.ack.mock.calls).toHaveLength(1);
     });
   });

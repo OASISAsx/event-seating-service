@@ -100,11 +100,9 @@
     },
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/src/$1",
-      "^uuid$": "<rootDir>/node_modules/uuid/dist-node/index.js"
+      "^uuid$": "<rootDir>/test/mocks/uuid.ts"
     },
     "testEnvironment": "node",
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(uuid)/)"
-    ]
+    "transformIgnorePatterns": []
   }
 }
