@@ -107,8 +107,8 @@ describe('ChatService', () => {
       await service.onModuleInit();
       await service.onModuleDestroy();
 
-      expect(mockChannel.close).toHaveBeenCalled();
-      expect(mockConnection.close).toHaveBeenCalled();
+      expect(mockChannel.close.mock.calls).toHaveLength(1);
+      expect(mockConnection.close.mock.calls).toHaveLength(1);
     });
   });
 
@@ -135,6 +135,7 @@ describe('ChatService', () => {
 
       await service.publishMessage(testRoomId, testMessage, 'message');
 
+      expect(mockChannel.publish.mock.calls).toHaveLength(1);
       expect(mockChannel.publish).toHaveBeenCalledWith(
         'chat.messages',
         `room.${testRoomId}`,
@@ -154,7 +155,7 @@ describe('ChatService', () => {
 
       await service.publishMessage(testRoomId, testMessage, 'message');
 
-      expect(mockChannel.publish).not.toHaveBeenCalled();
+      expect(mockChannel.publish.mock.calls).toHaveLength(0);
     });
 
     it('should handle publish failure', async () => {
@@ -162,7 +163,7 @@ describe('ChatService', () => {
 
       await service.publishMessage(testRoomId, testMessage, 'message');
 
-      expect(mockChannel.publish).toHaveBeenCalled();
+      expect(mockChannel.publish.mock.calls).toHaveLength(1);
     });
   });
 
@@ -282,7 +283,7 @@ describe('ChatService', () => {
       });
 
       expect(mockChatGateway.receiveMessage).not.toHaveBeenCalled();
-      expect(mockChannel.ack).toHaveBeenCalled();
+      expect(mockChannel.ack.mock.calls).toHaveLength(1);
     });
   });
 });
