@@ -32,6 +32,12 @@ spec:
               value: production
             - name: DATABASE_URL
               value: mongodb://mongo:27017/event_service
+            - name: RABBITMQ_URL
+              value: amqp://rabbitmq:5672
+            - name: REDIS_URL
+              value: redis://redis:6379
+            - name: REDIS_MAX_MESSAGES
+              value: '1000'
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
