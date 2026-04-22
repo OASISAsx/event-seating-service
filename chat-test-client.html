@@ -165,6 +165,7 @@
       function connect() {
         const userId = document.getElementById('userId').value;
         socket = io(`${socketBaseUrl}/chat`, {
+          path: '/api/socket.io',
           query: { userId },
         });
 

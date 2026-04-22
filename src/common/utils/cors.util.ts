@@ -37,3 +37,5 @@ export const corsOptions = {
   origin: corsOrigin,
   credentials: true,
 };
+
+export const socketIoPath = '/api/socket.io';

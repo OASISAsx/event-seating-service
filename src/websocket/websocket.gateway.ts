@@ -4,10 +4,11 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { corsOptions } from 'src/common/utils/cors.util';
+import { corsOptions, socketIoPath } from 'src/common/utils/cors.util';
 
 @WebSocketGateway({
   cors: corsOptions,
+  path: socketIoPath,
 })
 export class WebsocketGateway {
   @WebSocketServer()
