@@ -70,6 +70,7 @@ Connect to the chat namespace:
 ```javascript
 const socket = io('https://api.event-seat.elitefund.fun/chat', {
   path: '/api/socket.io',
+  transports: ['websocket'],
   query: { userId: 'user123' },
 });
 ```
@@ -180,6 +181,7 @@ npm install socket.io-client
 const io = require('socket.io-client');
 const socket = io('https://api.event-seat.elitefund.fun/chat', {
   path: '/api/socket.io',
+  transports: ['websocket'],
   query: { userId: 'test1' },
 });
 

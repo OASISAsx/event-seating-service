@@ -166,6 +166,7 @@
         const userId = document.getElementById('userId').value;
         socket = io(`${socketBaseUrl}/chat`, {
           path: '/api/socket.io',
+          transports: ['websocket'],
           query: { userId },
         });
 
