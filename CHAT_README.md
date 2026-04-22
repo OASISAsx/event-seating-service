@@ -68,10 +68,14 @@ pnpm run start:dev
 Connect to the chat namespace:
 
 ```javascript
-const socket = io('http://localhost:8080/chat', {
+const socket = io('https://api.event-seat.elitefund.fun/chat', {
   query: { userId: 'user123' },
 });
 ```
+
+Use your deployed API origin in production. Do not leave the client pointed at
+`localhost`, or the browser will try to open the Socket.IO connection against the
+user's own machine instead of your server.
 
 ### Events
 
@@ -173,7 +177,9 @@ npm install socket.io-client
 
 // Connect and test
 const io = require('socket.io-client');
-const socket = io('http://localhost:8080/chat', { query: { userId: 'test1' } });
+const socket = io('https://api.event-seat.elitefund.fun/chat', {
+  query: { userId: 'test1' },
+});
 
 socket.on('connect', () => {
   console.log('Connected!');

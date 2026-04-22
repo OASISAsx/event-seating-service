@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module';
+import { corsOptions } from './common/utils/cors.util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -18,7 +19,7 @@ async function bootstrap() {
     }),
   );
   app.setGlobalPrefix('api');
-  app.enableCors();
+  app.enableCors(corsOptions);
 
   const port = process.env.PORT ?? 3001;
   await app.listen(port, '0.0.0.0');

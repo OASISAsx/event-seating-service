@@ -4,6 +4,7 @@ metadata:
   name: api-ingress
   annotations:
     kubernetes.io/ingress.class: 'nginx'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
     # เปลี่ยนเป็น true เพื่อให้ระบบปลอดภัยและบังคับใช้ HTTPS
     nginx.ingress.kubernetes.io/ssl-redirect: 'true'
     nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
@@ -21,6 +22,35 @@ spec:
       http:
         paths:
           - path: /api/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 3001
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: socket-ingress
+  annotations:
+    kubernetes.io/ingress.class: 'nginx'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '3600'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '3600'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api.event-seat.elitefund.fun
+      secretName: event-seat-tls
+  rules:
+    - host: api.event-seat.elitefund.fun
+      http:
+        paths:
+          - path: /socket.io/?(.*)
             pathType: ImplementationSpecific
             backend:
               service:
