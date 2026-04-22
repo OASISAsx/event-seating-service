@@ -157,10 +157,14 @@
       let socket;
       let currentRoom = null;
       let typingTimeout;
+      const socketBaseUrl =
+        window.location.protocol === 'file:'
+          ? 'http://localhost:8080'
+          : 'https://api.event-seat.elitefund.fun';
 
       function connect() {
         const userId = document.getElementById('userId').value;
-        socket = io('http://localhost:8080/chat', {
+        socket = io(`${socketBaseUrl}/chat`, {
           query: { userId },
         });
 
