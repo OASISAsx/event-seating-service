@@ -44,11 +44,11 @@ spec:
           # --- ส่วนที่เพิ่ม/แก้ไข ---
           resources:
             requests:
-              cpu: '250m'
-              memory: '512Mi'
+              cpu: '50m' # ลดเหลือ 0.05 core (จองไว้น้อยๆ ก่อน)
+              memory: '256Mi' # ลดเหลือ 256MB
             limits:
-              cpu: '500m'
-              memory: '1Gi'
+              cpu: '200m' # จำกัดไว้ไม่เกิน 0.2 core
+              memory: '512Mi' # จำกัดไว้ไม่เกิน 512MB
           # -----------------------
           volumeMounts:
             - name: rabbitmq-data
