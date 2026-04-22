@@ -157,12 +157,14 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${SSH_USERNAME}@${SSH_HOST} "
                             kubectl apply -f ${K8S_PATH}/
                             kubectl set image deployment/backend backend=${IMAGE_NAME}:${IMAGE_TAG}
-                            
+                            kubectl apply -f ${K8S_PATH}/ingress.yaml
                             # 1. สั่ง Restart ทันทีเพื่อดึง Image ใหม่
                             kubectl rollout restart deployment/backend
                             
                             # 2. รอจนกว่าตัวที่ Restart ใหม่จะ Ready 100%
                             kubectl rollout status deployment/backend
+
+
                         "
                     """
                 }
