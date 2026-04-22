@@ -41,6 +41,15 @@ spec:
               value: guest
             - name: RABBITMQ_DEFAULT_PASS
               value: guest
+          # --- ส่วนที่เพิ่ม/แก้ไข ---
+          resources:
+            requests:
+              cpu: '250m'
+              memory: '512Mi'
+            limits:
+              cpu: '500m'
+              memory: '1Gi'
+          # -----------------------
           volumeMounts:
             - name: rabbitmq-data
               mountPath: /var/lib/rabbitmq
@@ -50,16 +59,20 @@ spec:
                 - rabbitmq-diagnostics
                 - -q
                 - ping
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            initialDelaySeconds: 60 # ให้เวลาบูตนานขึ้นเล็กน้อย
+            periodSeconds: 15
+            timeoutSeconds: 10 # ปรับจาก 1s เป็น 10s
+            failureThreshold: 5 # ยอมให้พลาดได้ 5 ครั้ง
           readinessProbe:
             exec:
               command:
                 - rabbitmq-diagnostics
                 - -q
                 - ping
-            initialDelaySeconds: 20
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 10 # ปรับจาก 1s เป็น 10s
+            failureThreshold: 3
       volumes:
         - name: rabbitmq-data
           persistentVolumeClaim:
