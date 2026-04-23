@@ -43,6 +43,9 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_SECRET
+          envFrom:
+            - secretRef:
+                name: r2-config
           resources:
             requests:
               cpu: '100m'
